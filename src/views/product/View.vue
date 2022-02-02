@@ -5,16 +5,12 @@
         <img :src="product.image" :alt="product.title">
       </div>
       <div class="product-view__info">
-        <h1>{{ product.title }}</h1>
+        <h2>{{ product.title }}</h2>
+        <h6>{{ product.category }}</h6>
         <p>{{ product.description }}</p>
 
         <table class="table table-sm d-inline table-borderless">
           <tbody>
-          <tr>
-            <td>Count</td>
-            <td>:</td>
-            <td>{{ ratingCount }}</td>
-          </tr>
           <tr>
             <td>Rate</td>
             <td>:</td>
@@ -90,7 +86,8 @@ export default {
 
       return `<i class="la la-star"></i>`.repeat(full)
              + `<i class="la la-star-half-alt"></i>`.repeat(half)
-             + `<i class="la la-star-o"></i>`.repeat(rest);
+             + `<i class="la la-star-o"></i>`.repeat(rest)
+             + ` <span class="text-muted">(${this.product.rating.count})</span>`;
     },
     ratingCount() {
       return this.product.rating.count;
