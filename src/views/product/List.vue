@@ -59,7 +59,6 @@ export default {
   },
   created() {
     this.getProductList();
-    console.log('CategoryProductList');
   },
   methods : {
     getProductList() {
@@ -82,6 +81,11 @@ export default {
           ? `/category/${this.$route.params.category}`
           : ''
       }`
+    },
+  },
+  watch   : {
+    "$route"() {
+      this.getProductList();
     },
   },
 }
