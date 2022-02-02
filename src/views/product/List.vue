@@ -1,7 +1,7 @@
 <template>
   <div class="" v-show="!loading">
     <div class="" v-if="productList.length">
-      <table class="table table-hover table-striped table-light">
+      <table class="table table-hover table-bordered table-striped table-light">
         <thead>
         <tr>
           <th scope="col">#</th>
