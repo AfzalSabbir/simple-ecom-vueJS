@@ -42,6 +42,14 @@ const routes = [
                 component: ProductList,
             },
             {
+                path     : 'category/:category',
+                name     : 'CategoryProductList',
+                meta     : {
+                    title: 'Category Product List',
+                },
+                component: ProductList,
+            },
+            {
                 path     : ':id',
                 name     : 'ProductView',
                 meta     : {

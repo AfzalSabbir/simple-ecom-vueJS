@@ -16,7 +16,11 @@
         <tr v-for="(product, index) in productList" :key="product.id">
           <th scope="row">{{ index + 1 }}</th>
           <td class="text-start">{{ product.title }}</td>
-          <td>{{ product.category }}</td>
+          <td>
+            <router-link :to="{ name: 'CategoryProductList', params: {category: `${product.category}`} }">
+              {{ product.category }}
+            </router-link>
+          </td>
           <td>{{ product.price }}</td>
           <td>{{ product.rating.rate }}</td>
           <td>
@@ -50,22 +54,34 @@ export default {
     return {
       productList: [],
       loading    : true,
+      baseUrl    : 'https://fakestoreapi.com/products',
     }
   },
   created() {
     this.getProductList();
+    console.log('CategoryProductList');
   },
-  methods: {
+  methods : {
     getProductList() {
       this.loading = true;
-      axios.get('https://fakestoreapi.com/products')
+      axios.get(this.url)
           .then(response => {
-            console.log(response)
             this.productList = response.data;
           })
           .finally(() => {
             this.loading = false;
           });
+    },
+  },
+  computed: {
+    url() {
+      return `${
+          this.baseUrl
+      }${
+          this.$route.name === 'CategoryProductList'
+          ? `/category/${this.$route.params.category}`
+          : ''
+      }`
     },
   },
 }

@@ -66,7 +66,6 @@ export default {
       this.loading = true;
       axios.get(`https://fakestoreapi.com/products/${this.id}`)
           .then(response => {
-            console.log(response)
             this.product = response.data;
           })
           .finally(() => {
