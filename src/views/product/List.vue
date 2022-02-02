@@ -1,41 +1,75 @@
 <template>
-  <table class="table">
-    <thead>
-    <tr>
-      <th scope="col">#</th>
-      <th scope="col">First</th>
-      <th scope="col">Last</th>
-      <th scope="col">Handle</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr>
-      <th scope="row">1</th>
-      <td>Mark</td>
-      <td>Otto</td>
-      <td>@mdo</td>
-    </tr>
-    <tr>
-      <th scope="row">2</th>
-      <td>Jacob</td>
-      <td>Thornton</td>
-      <td>@fat</td>
-    </tr>
-    <tr>
-      <th scope="row">3</th>
-      <td colspan="2">Larry the Bird</td>
-      <td>@twitter</td>
-    </tr>
-    </tbody>
-  </table>
+  <div class="" v-show="!loading">
+    <div class="" v-if="productList.length">
+      <table class="table table-hover table-striped table-light">
+        <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col" class="text-start">Name</th>
+          <th scope="col">Category</th>
+          <th scope="col">Price</th>
+          <th scope="col">Rating</th>
+          <th scope="col">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr v-for="(product, index) in productList" :key="product.id">
+          <th scope="row">{{ index + 1 }}</th>
+          <td class="text-start">{{ product.title }}</td>
+          <td>{{ product.category }}</td>
+          <td>{{ product.price }}</td>
+          <td>{{ product.rating.rate }}</td>
+          <td>
+            <div class="btn-group btn-group-sm">
+              <router-link :to="{ name: 'ProductView', params: {id:product.id} }"
+                           class="btn btn-info">View
+              </router-link>
+            </div>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="" v-else>
+      <h3>No products found</h3>
+    </div>
+  </div>
+  <div class="" v-show="loading">
+    <div class="d-flex justify-content-center">
+      <i class="la la-spinner la-pulse la-3x"></i>
+    </div>
+  </div>
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
   name: "ProductList",
+  data() {
+    return {
+      productList: [],
+      loading    : true,
+    }
+  },
+  created() {
+    this.getProductList();
+  },
+  methods: {
+    getProductList() {
+      this.loading = true;
+      axios.get('https://fakestoreapi.com/products')
+          .then(response => {
+            console.log(response)
+            this.productList = response.data;
+          })
+          .finally(() => {
+            this.loading = false;
+          });
+    },
+  },
 }
 </script>
 
 <style scoped>
-
 </style>
