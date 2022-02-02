@@ -6,7 +6,10 @@
       </div>
       <div class="product-view__info">
         <h2>{{ product.title }}</h2>
-        <h6>{{ product.category }}</h6>
+        <router-link :to="{ name: 'CategoryProductList', params: {category: `${product.category}`} }"
+                     class="btn px-0">
+          <h6>{{ product.category }}</h6>
+        </router-link>
         <p>{{ product.description }}</p>
 
         <table class="table table-sm d-inline table-borderless">
