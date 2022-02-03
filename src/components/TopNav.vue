@@ -20,7 +20,7 @@
             <router-link class="nav-link" to="/about">About</router-link>
           </li>
           <li class="nav-item">
-            <router-link class="nav-link" :to="{ name: 'ProductList'}">Products</router-link>
+            <router-link class="nav-link" :to="{ name: 'ProductList' }">Products</router-link>
           </li>
         </ul>
         <form class="d-none d-flex">
@@ -33,6 +33,8 @@
 </template>
 
 <script>
+//import {Dropdown} from "bootstrap"
+
 export default {
   name: "TopNav",
 }
