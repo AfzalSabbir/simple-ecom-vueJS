@@ -3,6 +3,8 @@ import Home                             from '@/views/Home.vue'
 import Product                          from '@/views/product/Index'
 import ProductList                      from '@/views/product/List'
 import ProductView                      from '@/views/product/View'
+import User                             from '@/views/user/Index'
+import UserList                         from '@/views/user/List'
 import Login                            from "@/views/auth/Login";
 import Register                         from "@/views/auth/Register";
 
@@ -30,6 +32,32 @@ const routes = [
         // which is lazy-loaded when the route is visited.
         component: () => import(/* webpackChunkName: "about" */ '../views/About.vue'),
     },
+
+    {
+        path     : '/user',
+        name     : 'User',
+        component: User,
+        children : [
+            {
+                path     : '',
+                name     : 'UserList',
+                meta     : {
+                    title: 'User List',
+                },
+                component: UserList,
+            },
+            {
+                path     : ':id',
+                name     : 'UserView',
+                meta     : {
+                    title: 'User View',
+                },
+                component: UserList,
+                props    : true,
+            },
+        ],
+    },
+
     {
         path     : '/product',
         name     : 'Product',
