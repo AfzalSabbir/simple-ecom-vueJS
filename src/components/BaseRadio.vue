@@ -1,17 +1,20 @@
 <template>
-  <input :class="className"
+  <input :class="[className, errorClassName]"
          :value="value"
          :id="uuid"
          :checked="modelValue === value"
          @change="$emit('update:modelValue', value)"
          v-bind="$attrs">
-  <label :for="uuid">
+  <label :for="uuid" :class="errorClassName">
     {{ label }}
   </label>
+
+  <ShowErrorMessages :errors="errors"/>
 </template>
 
 <script>
-import Uuid from "@/tools/UUID";
+import Helpers from "@/tools/Helpers";
+import Uuid    from "@/tools/UUID";
 
 export default {
   name : "BasicRadio",
@@ -29,20 +32,26 @@ export default {
       required: true,
     },
     className : {
-      type   : String,
+      type   : [String, Array],
       default: '',
     },
     name      : {
       type    : String,
       required: true,
     },
+    errors    : {
+      type   : Array,
+      default: [],
+    },
   },
 
-  setup() {
-    const uuid = Uuid().generate();
+  setup(props) {
+    const uuid   = Uuid().generate();
+    let {errors} = props;
 
     return {
       uuid,
+      errorClassName: Helpers().getErrorClassName(errors),
     };
   },
 }

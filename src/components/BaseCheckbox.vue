@@ -1,16 +1,19 @@
 <template>
-  <input :class="className"
+  <input :class="[className, errorClassName]"
          :id="uuid"
          :checked="modelValue"
          @change="$emit('update:modelValue', $event.target.checked)"
          v-bind="$attrs">
-  <label :for="uuid" v-if="label">
+  <label :for="uuid" :class="errorClassName" v-if="label">
     {{ label }}
   </label>
+
+  <ShowErrorMessages :errors="errors"/>
 </template>
 
 <script>
-import Uuid from "@/tools/UUID";
+import Helpers from "@/tools/Helpers";
+import Uuid    from "@/tools/UUID";
 
 export default {
   name : "BasicCheckbox",
@@ -27,13 +30,19 @@ export default {
       type   : String,
       default: '',
     },
+    errors    : {
+      type   : Array,
+      default: [],
+    },
   },
 
-  setup() {
-    const uuid = Uuid().generate();
+  setup(props) {
+    const uuid   = Uuid().generate();
+    let {errors} = props;
 
     return {
       uuid,
+      errorClassName: Helpers().getErrorClassName(errors),
     };
   },
 }

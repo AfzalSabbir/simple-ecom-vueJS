@@ -8,6 +8,7 @@ import {Dropdown}              from 'bootstrap'
 // import css
 import 'bootstrap/dist/css/bootstrap.css'
 import 'line-awesome/dist/line-awesome/css/line-awesome.css'
+import ShowErrorMessages       from "@/components/ShowErrorMessages";
 
 const app = createApp(App)
 
@@ -29,6 +30,8 @@ requiredComponents.keys().forEach(fileName => {
     );
     app.component(componentName, componentConfig.default || componentConfig);
 });
+
+app.component('ShowErrorMessages', ShowErrorMessages);
 
 app.use(store)
     .use(router)

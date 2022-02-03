@@ -1,19 +1,22 @@
 <template>
-  <label class="d-block mt-2" v-if="label">
+  <label class="d-block mt-2" :class="errorClassName" v-if="label">
     {{ label }}
   </label>
   <div v-for="option in options">
     <BaseRadio :label="option.label"
                @change="$emit('update:modelValue', option.value)"
                v-bind="$attrs"
-               :className="className"
+               :className="[className, errorClassName]"
                :value="option.value"
                :modelValue="modelValue"
                name="gender"/>
   </div>
+
+  <ShowErrorMessages :errors="errors"/>
 </template>
 
 <script>
+import Helpers from "@/tools/Helpers";
 export default {
   name : "BasicCheckbox",
   props: {
@@ -37,6 +40,18 @@ export default {
       type    : String,
       required: true,
     },
+    errors     : {
+      type   : Array,
+      default: [],
+    },
+  },
+
+  setup(props) {
+    let {errors} = props;
+
+    return {
+      errorClassName: Helpers().getErrorClassName(errors),
+    };
   },
 }
 </script>

@@ -1,6 +1,6 @@
 <template>
-  <label v-if="label">{{ label }}</label>
-  <select :class="className"
+  <label v-if="label" :class="errorClassName">{{ label }}</label>
+  <select :class="[className, errorClassName]"
           :value="modelValue"
           v-bind="$attrs"
           @change="$emit('update:modelValue', $event.target.value)">
@@ -9,9 +9,13 @@
       {{ option.label }}
     </option>
   </select>
+
+  <ShowErrorMessages :errors="errors"/>
 </template>
 
 <script>
+import Helpers from "@/tools/Helpers";
+
 export default {
   name : 'BaseSelect',
   props: {
@@ -30,8 +34,20 @@ export default {
     },
     options   : {
       type   : Array,
-      default: () => [],
+      default: [],
     },
+    errors    : {
+      type   : Array,
+      default: [],
+    },
+  },
+
+  setup(props) {
+    let {errors} = props;
+
+    return {
+      errorClassName: Helpers().getErrorClassName(errors),
+    };
   },
 }
 </script>
