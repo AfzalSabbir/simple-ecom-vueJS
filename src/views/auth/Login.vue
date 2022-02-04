@@ -55,7 +55,6 @@ export default {
   name      : "Login",
   components: {BaseSelect},
   setup() {
-    // Save user
     const marital_statuses = ref([
       {
         label: 'Married',
@@ -98,21 +97,6 @@ export default {
         value: 'gaming',
       },
     ]);
-    const form             = ref({
-      name                 : '',
-      username             : '',
-      email                : '',
-      expected_salary      : '',
-      date_of_birth        : '',
-      password             : '',
-      password_confirmation: '',
-      marital_status       : '',
-      gender               : '',
-      gender2              : '',
-      gaming               : false,
-      can_swim             : false,
-      mobile               : '',
-    });
     const login            = () => {
       let users = JSON.parse(localStorage.getItem('users') ?? "[]");
 

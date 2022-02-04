@@ -1,12 +1,31 @@
 <template>
   <div class="register row justify-content-center align-items-center">
-    <div class="offset-4 col-8">
+    <div class="offset-6 col-6">
       <h3>Create a new user</h3>
     </div>
-    <div class="col-lg-4">
-      <pre>{{ form }}</pre>
+    <div class="col-lg-3">
+      <pre>{{
+          {
+            name,
+            username,
+            email,
+            expected_salary,
+            date_of_birth,
+            password,
+            password_confirmation,
+            marital_status,
+            gender,
+            gender2,
+            gaming,
+            can_swim,
+            mobile,
+          }
+        }}</pre>
     </div>
-    <div class="col-lg-8">
+    <div class="col-lg-3">
+      <pre>{{ errors }}</pre>
+    </div>
+    <div class="col-lg-6">
       <form @submit.prevent="saveUser" class="my-3">
         <div class="row">
           <div class="col-md-6">
@@ -15,42 +34,42 @@
                        label="Name"
                        className="form-control mb-2"
                        placeholder="Type your full name"
-                       v-model="form.name"/>
+                       v-model="name"/>
 
             <BaseInput type="text"
                        :errors="errors.username"
                        label="Username"
                        className="form-control mb-2"
                        placeholder="Type username"
-                       v-model="form.username"/>
+                       v-model="username"/>
 
             <BaseInput type="number"
                        :errors="errors.expected_salary"
                        label="Expected Salary"
                        className="form-control mb-2"
                        placeholder="Your Expected Salary"
-                       v-model="form.expected_salary"/>
+                       v-model="expected_salary"/>
 
             <BaseInput type="email"
                        :errors="errors.email"
                        label="Email"
                        className="form-control mb-2"
                        placeholder="Type Email"
-                       v-model="form.email"/>
+                       v-model="email"/>
 
             <BaseInput type="password"
                        :errors="errors.password"
                        label="Password"
                        className="form-control mb-2"
                        placeholder="Type Password"
-                       v-model="form.password"/>
+                       v-model="password"/>
 
             <BaseInput type="password"
                        :errors="errors.password_confirmation"
                        label="Confirm Password"
                        className="form-control mb-2"
                        placeholder="Type Confirm Password"
-                       v-model="form.password_confirmation"/>
+                       v-model="password_confirmation"/>
           </div>
           <div class="col-md-6">
             <BaseInput type="date"
@@ -58,18 +77,18 @@
                        label="Date Of Birth"
                        className="form-control mb-2"
                        placeholder="Date Of Birth"
-                       v-model="form.date_of_birth"/>
+                       v-model="date_of_birth"/>
 
             <BaseInput type="tel"
                        :errors="errors.mobile"
                        label="Mobile"
                        className="form-control mb-2"
                        placeholder="Mobile"
-                       v-model="form.mobile"/>
+                       v-model="mobile"/>
 
             <BaseSelect label="Marital Status"
                         :errors="errors.marital_status"
-                        v-model="form.marital_status"
+                        v-model="marital_status"
                         className="form-control mb-2"
                         :options="marital_statuses"/>
 
@@ -77,14 +96,14 @@
                           :errors="errors.gaming"
                           type="checkbox"
                           className="me-1 my-2"
-                          v-model="form.gaming"/>
+                          v-model="gaming"/>
 
             <BaseRadioGroup label="Gender"
                             :errors="errors.gender"
                             type="radio"
                             name="gender"
                             className="me-1"
-                            v-model="form.gender"
+                            v-model="gender"
                             :options="genders"/>
 
             <BaseRadioGroup label="Gender 2"
@@ -92,14 +111,14 @@
                             type="radio"
                             name="gender"
                             className="me-1"
-                            v-model="form.gender2"
+                            v-model="gender2"
                             :options="genders"/>
 
             <BaseCheckbox label="Can Swim"
                           :errors="errors.can_swim"
                           type="checkbox"
                           className="me-1 my-2"
-                          v-model="form.can_swim"/>
+                          v-model="can_swim"/>
           </div>
           <div class="col-12">
             <button class="btn btn-primary btn-block mt-3"
@@ -114,9 +133,10 @@
 </template>
 
 <script>
-import BaseSelect from "@/components/BaseSelect";
-import {ref}      from "vue";
-
+import BaseSelect          from "@/components/BaseSelect";
+import {ref}               from "vue";
+import * as yup            from "yup";
+import {useField, useForm} from "vee-validate";
 
 export default {
   name      : "Register",
@@ -165,7 +185,30 @@ export default {
         value: 'gaming',
       },
     ]);
-    const form             = ref({
+    const saveUser         = () => {
+      let users = JSON.parse(localStorage.getItem('users') ?? "[]");
+      users.findIndex(user => user.email === value.email) === -1
+      ? users.push(value)
+      : alert('User already exists');
+
+      console.log(users.indexOf(user => user.email === value.email), 'aaa');
+
+      localStorage.setItem('users', JSON.stringify(users));
+    };
+
+    const validationSchema = yup.object().shape({
+      name                 : yup.string().required('Name is required').min(3, 'Name must be at least 3 characters'),
+      username             : yup.string().required('Username is required').min(3, 'Username must be at least 3 characters'),
+      email                : yup.string().required('Email is required'),
+      expected_salary      : yup.number().required('Expected Salary is required').min(0, 'Expected Salary must be at least 0'),
+      date_of_birth        : yup.string().required('Date of Birth is required'),
+      password             : yup.string().required('Password is required').min(6, 'Password must be at least 6 characters'),
+      password_confirmation: yup.string().required('Password Confirmation is required').oneOf([
+        yup.ref('password'), null,
+      ], 'Passwords must match'),
+      marital_status       : yup.string().required('Marital Status is required'),
+    })
+    const initialValues    = {
       name                 : '',
       username             : '',
       email                : '',
@@ -179,39 +222,53 @@ export default {
       gaming               : false,
       can_swim             : false,
       mobile               : '',
+    }
+
+    const {handleSubmit, errors, setFieldValue} = useForm({
+      validationSchema,
+      initialValues,
     });
-    const saveUser         = () => {
-      let users = JSON.parse(localStorage.getItem('users') ?? "[]");
-      users.findIndex(user => user.email === form.value.email) === -1
-      ? users.push(form.value)
-      : alert('User already exists');
 
-      console.log(users.indexOf(user => user.email === form.value.email), 'aaa');
+    const {value: name}                  = useField('name');
+    const {value: username}              = useField('username');
+    const {value: email}                 = useField('email');
+    const {value: expected_salary}       = useField('expected_salary');
+    const {value: date_of_birth}         = useField('date_of_birth');
+    const {value: password}              = useField('password');
+    const {value: password_confirmation} = useField('password_confirmation');
+    const {value: marital_status}        = useField('marital_status');
+    const {value: gender}                = useField('gender');
+    const {value: gender2}               = useField('gender2');
+    const {value: gaming}                = useField('gaming');
+    const {value: can_swim}              = useField('can_swim');
+    const {value: mobile}                = useField('mobile');
 
-      localStorage.setItem('users', JSON.stringify(users));
-    };
 
-    const errors = {
-      name                 : [],
-      username             : [],
-      email                : [],
-      expected_salary      : [],
-      date_of_birth        : [],
-      password             : [],
-      password_confirmation: [],
-      marital_status       : [],
-      mobile               : [],
-      can_swim             : [],
-      gaming               : [],
-    };
+    const submit = handleSubmit((data) => {
+      console.log(data);
+      saveUser();
+    });
 
     return {
       marital_statuses,
       genders,
       hobbies,
-      form,
-      saveUser,
+      submit,
       errors,
+
+      name,
+      username,
+      email,
+      expected_salary,
+      date_of_birth,
+      password,
+      password_confirmation,
+      marital_status,
+      gender,
+      gender2,
+      gaming,
+      can_swim,
+      mobile,
     }
   },
 }
