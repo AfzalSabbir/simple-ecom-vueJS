@@ -13,16 +13,18 @@
             <BaseInput type="email"
                        :error="errors.email"
                        label="Email"
+                       @change="handleEmailChange"
                        className="form-control mb-2"
                        placeholder="Type Email"
-                       v-model="email"/>
+                       :modelValue="email"/>
 
             <BaseInput type="password"
                        :error="errors.password"
                        label="Password"
+                       @change="handlePasswordChange"
                        className="form-control mb-2"
                        placeholder="Type Password"
-                       v-model="password"/>
+                       :modelValue="password"/>
 
             <BaseCheckbox label="Remember me"
                           type="checkbox"
@@ -122,29 +124,9 @@ export default {
       localStorage.setItem('users', JSON.stringify(users));
     };
 
-    /*const required = (value) => {
-      return !!value || 'This field is required';
-    };
-
-    const validEmail = (value) => {
-      return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(value) || 'Please enter a valid email address';
-    }*/
-
-    /*const validationSchema = {
-      email   : value => {
-        const req = required(value);
-        if (req !== true) return req;
-        const val = validEmail(value);
-        if (val !== true) return val;
-
-        return true;
-      },
-      password: required,
-    }*/
-
     const validationSchema = yup.object().shape({
       email   : yup.string().required('This field is required').email('Please enter a valid email address'),
-      password: yup.string().required('This field is required'),
+      password: yup.string().required('This field is required').min(6, 'Password must be at least 6 characters'),
     });
 
     const initialValues = {
@@ -152,7 +134,7 @@ export default {
       password: '',
     }
 
-    const {handleSubmit, errors} = useForm(
+    const {handleSubmit, errors, setFieldValue} = useForm(
         {
           validationSchema,
           initialValues,
@@ -167,6 +149,14 @@ export default {
     const {value: email}    = useField('email');
     const {value: password} = useField('password');
 
+    const handleEmailChange = (e) => {
+      setFieldValue('email', e.target.value);
+    };
+
+    const handlePasswordChange = (e) => {
+      setFieldValue('password', e.target.value);
+    };
+
     const remember_me = ref(false);
 
     return {
@@ -178,6 +168,8 @@ export default {
       remember_me,
       submit,
       errors,
+      handleEmailChange,
+      handlePasswordChange,
     }
   },
 }
