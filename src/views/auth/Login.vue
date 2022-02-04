@@ -115,13 +115,22 @@ export default {
     });
     const login            = () => {
       let users = JSON.parse(localStorage.getItem('users') ?? "[]");
-      users.findIndex(user => user.email === form.value.email) === -1
-      ? users.push(form.value)
-      : alert('User already exists');
 
-      console.log(users.indexOf(user => user.email === form.value.email), 'aaa');
+      let login = users.findIndex((user) => {
+        if (user.email === email.value && user.password === password.value) {
+          localStorage.setItem('user', JSON.stringify(user));
 
-      localStorage.setItem('users', JSON.stringify(users));
+          return true;
+        }
+
+        return false;
+      });
+
+      if (login !== -1) {
+        console.log('\n\n\nUser logged in\n\n\n');
+      } else {
+        console.log('\n\n\nUser not found\n\n\n');
+      }
     };
 
     const validationSchema = yup.object().shape({
