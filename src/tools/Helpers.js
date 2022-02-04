@@ -1,5 +1,5 @@
 export default function Helpers() {
-    let errorClassName      = 'border-danger';
+    let errorClassName      = 'is-invalid';
     const getErrorClassName = (errors) => {
         return errors.length ? errorClassName : '';
     };

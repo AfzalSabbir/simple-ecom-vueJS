@@ -117,6 +117,7 @@
 import BaseSelect from "@/components/BaseSelect";
 import {ref}      from "vue";
 
+
 export default {
   name      : "Register",
   components: {BaseSelect},
@@ -191,21 +192,17 @@ export default {
     };
 
     const errors = {
-      name                 : [{message: 'Name is required'}],
+      name                 : [],
       username             : [],
-      email                : [
-        {message: 'Email is required'},
-      ],
+      email                : [],
       expected_salary      : [],
       date_of_birth        : [],
-      password             : [
-        {message: 'Password min length: 6'},
-        {message: 'Use some special characters'},
-      ],
+      password             : [],
       password_confirmation: [],
       marital_status       : [],
       mobile               : [],
       can_swim             : [],
+      gaming               : [],
     };
 
     return {

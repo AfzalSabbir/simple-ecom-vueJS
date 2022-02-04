@@ -9,7 +9,7 @@
     {{ label }}
   </label>
 
-  <ShowErrorMessages :errors="errors"/>
+  <ShowErrorMessages :errors="errors" :error="error"/>
 </template>
 
 <script>

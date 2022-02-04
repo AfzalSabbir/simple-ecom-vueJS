@@ -12,7 +12,7 @@
                name="gender"/>
   </div>
 
-  <ShowErrorMessages :errors="errors"/>
+  <ShowErrorMessages :errors="errors" :error="error"/>
 </template>
 
 <script>

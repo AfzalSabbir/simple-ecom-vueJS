@@ -7,7 +7,7 @@
          @input="$emit('update:modelValue', $event.target.value)"
          :value="modelValue"/>
 
-  <ShowErrorMessages :errors="errors"/>
+  <ShowErrorMessages :errors="errors" :error="error"/>
 </template>
 
 <script>
@@ -31,6 +31,10 @@ export default {
     errors    : {
       type   : Array,
       default: [],
+    },
+    error     : {
+      type   : String,
+      default: '',
     },
   },
 
