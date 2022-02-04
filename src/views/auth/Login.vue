@@ -130,7 +130,7 @@ export default {
       return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(value) || 'Please enter a valid email address';
     }
 
-    const validations = {
+    const validationSchema = {
       email   : value => {
         const req = required(value);
         if (req !== true) return req;
@@ -142,27 +142,25 @@ export default {
       password: required,
     }
 
-    const {handleSubmit, errors} = useForm({validationSchema: validations});
+    const initialValues = {
+      email   : '',
+      password: '',
+    }
+
+    const {handleSubmit, errors} = useForm(
+        {
+          validationSchema,
+          initialValues,
+        },
+    );
 
     const submit = handleSubmit(values => {
       console.log(values);
       login();
     });
 
-    const {value: email}    = useField(
-        'email',
-        undefined,
-        {
-          initialValue: '',
-        },
-    );
-    const {value: password} = useField(
-        'password',
-        undefined,
-        {
-          initialValue: '',
-        },
-    );
+    const {value: email}    = useField('email');
+    const {value: password} = useField('password');
 
     const remember_me = ref(false);
 
