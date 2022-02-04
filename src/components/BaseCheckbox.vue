@@ -34,6 +34,10 @@ export default {
       type   : Array,
       default: [],
     },
+    error    : {
+      type   : String,
+      default: null,
+    },
   },
 
   setup(props) {

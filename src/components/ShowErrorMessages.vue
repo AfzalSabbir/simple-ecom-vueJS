@@ -21,7 +21,7 @@ export default {
     },
     error : {
       type   : String,
-      default: '',
+      default: null,
     },
     target: {
       type   : String,

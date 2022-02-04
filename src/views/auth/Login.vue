@@ -4,21 +4,21 @@
       <h3>User sign in</h3>
     </div>
     <div class="col-lg-4">
-      <pre>{{ [emailError, passwordError] }}</pre>
+      <pre>{{ errors }}</pre>
     </div>
     <div class="col-lg-8">
-      <form @submit.prevent="saveUser" class="my-3">
+      <form @submit="submit" class="my-3">
         <div class="row">
           <div class="col-md-6">
             <BaseInput type="email"
-                       :error="emailError"
+                       :error="errors.email"
                        label="Email"
                        className="form-control mb-2"
                        placeholder="Type Email"
                        v-model="email"/>
 
             <BaseInput type="password"
-                       :error="passwordError"
+                       :error="errors.password"
                        label="Password"
                        className="form-control mb-2"
                        placeholder="Type Password"
@@ -111,7 +111,7 @@ export default {
       can_swim             : false,
       mobile               : '',
     });
-    const saveUser         = () => {
+    const login            = () => {
       let users = JSON.parse(localStorage.getItem('users') ?? "[]");
       users.findIndex(user => user.email === form.value.email) === -1
       ? users.push(form.value)
@@ -120,20 +120,6 @@ export default {
       console.log(users.indexOf(user => user.email === form.value.email), 'aaa');
 
       localStorage.setItem('users', JSON.stringify(users));
-    };
-
-    const errors = {
-      name                 : [],
-      username             : [],
-      email                : [],
-      expected_salary      : [],
-      date_of_birth        : [],
-      password             : [],
-      password_confirmation: [],
-      marital_status       : [],
-      mobile               : [],
-      can_swim             : [],
-      gaming               : [],
     };
 
     const required = (value) => {
@@ -156,10 +142,27 @@ export default {
       password: required,
     }
 
-    useForm({validationSchema: validations});
+    const {handleSubmit, errors} = useForm({validationSchema: validations});
 
-    const {value: email, errorMessage: emailError}       = useField('email');
-    const {value: password, errorMessage: passwordError} = useField('password');
+    const submit = handleSubmit(values => {
+      console.log(values);
+      login();
+    });
+
+    const {value: email}    = useField(
+        'email',
+        undefined,
+        {
+          initialValue: '',
+        },
+    );
+    const {value: password} = useField(
+        'password',
+        undefined,
+        {
+          initialValue: '',
+        },
+    );
 
     const remember_me = ref(false);
 
@@ -168,11 +171,9 @@ export default {
       genders,
       hobbies,
       email,
-      emailError,
       password,
-      passwordError,
       remember_me,
-      saveUser,
+      submit,
       errors,
     }
   },

@@ -34,7 +34,7 @@ export default {
     },
     error     : {
       type   : String,
-      default: '',
+      default: null,
     },
   },
 
