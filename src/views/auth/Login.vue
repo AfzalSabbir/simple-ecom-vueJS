@@ -47,7 +47,7 @@
 import BaseSelect          from "@/components/BaseSelect";
 import {ref}               from "vue";
 import {useField, useForm} from "vee-validate";
-
+import * as yup            from "yup";
 
 export default {
   name      : "Login",
@@ -122,15 +122,15 @@ export default {
       localStorage.setItem('users', JSON.stringify(users));
     };
 
-    const required = (value) => {
+    /*const required = (value) => {
       return !!value || 'This field is required';
     };
 
     const validEmail = (value) => {
       return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(value) || 'Please enter a valid email address';
-    }
+    }*/
 
-    const validationSchema = {
+    /*const validationSchema = {
       email   : value => {
         const req = required(value);
         if (req !== true) return req;
@@ -140,7 +140,12 @@ export default {
         return true;
       },
       password: required,
-    }
+    }*/
+
+    const validationSchema = yup.object().shape({
+      email   : yup.string().required('This field is required').email('Please enter a valid email address'),
+      password: yup.string().required('This field is required'),
+    });
 
     const initialValues = {
       email   : '',
