@@ -136,21 +136,24 @@ export default {
       gaming               : [],
     };
 
+    const required = (value) => {
+      return !!value || 'This field is required';
+    };
+
+    const validEmail = (value) => {
+      return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(value) || 'Please enter a valid email address';
+    }
+
     const validations = {
       email   : value => {
-        if (!value) {
-          return 'Email is required';
-        }
+        const req = required(value);
+        if (req !== true) return req;
+        const val = validEmail(value);
+        if (val !== true) return val;
 
         return true;
       },
-      password: value => {
-        if (!value) {
-          return 'Password is required';
-        }
-
-        return true;
-      },
+      password: required,
     }
 
     useForm({validationSchema: validations});
