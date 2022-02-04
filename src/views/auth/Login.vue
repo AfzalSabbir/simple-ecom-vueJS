@@ -44,9 +44,9 @@
 </template>
 
 <script>
-import BaseSelect from "@/components/BaseSelect";
-import {ref}      from "vue";
-import {useField} from "vee-validate";
+import BaseSelect          from "@/components/BaseSelect";
+import {ref}               from "vue";
+import {useField, useForm} from "vee-validate";
 
 
 export default {
@@ -136,21 +136,27 @@ export default {
       gaming               : [],
     };
 
-    const email = useField('email', (value) => {
-      if (!value) {
-        return 'Email is required';
-      }
+    const validations = {
+      email   : value => {
+        if (!value) {
+          return 'Email is required';
+        }
 
-      return true;
-    });
+        return true;
+      },
+      password: value => {
+        if (!value) {
+          return 'Password is required';
+        }
 
-    const password = useField('password', (value) => {
-      if (!value) {
-        return 'Password is required';
-      }
+        return true;
+      },
+    }
 
-      return true;
-    });
+    useForm({validationSchema: validations});
+
+    const {value: email, errorMessage: emailError}       = useField('email');
+    const {value: password, errorMessage: passwordError} = useField('password');
 
     const remember_me = ref(false);
 
@@ -158,10 +164,10 @@ export default {
       marital_statuses,
       genders,
       hobbies,
-      email        : email.value ?? '',
-      emailError   : email.errorMessage,
-      password     : password.value ?? '',
-      passwordError: password.errorMessage,
+      email,
+      emailError,
+      password,
+      passwordError,
       remember_me,
       saveUser,
       errors,
