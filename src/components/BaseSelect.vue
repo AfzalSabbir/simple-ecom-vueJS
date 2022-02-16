@@ -10,7 +10,7 @@
     </option>
   </select>
 
-  <ShowErrorMessages :errors="errors"/>
+  <ShowErrorMessages :errors="errors" :error="error"/>
 </template>
 
 <script>
@@ -39,6 +39,10 @@ export default {
     errors    : {
       type   : Array,
       default: [],
+    },
+    error     : {
+      type   : String,
+      default: null,
     },
   },
 
